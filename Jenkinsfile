@@ -9,6 +9,7 @@ pipeline {
     }
     environment{
         appVersion = ''
+        nexusUrl = 'http://54.198.30.190:8081'
     }
     stages {
         stage ("read the version"){
@@ -16,10 +17,7 @@ pipeline {
                 script {
                     def packageJson = readJSON file: 'package.json'
                     appVersion = packageJson.version
-                    echo "application version: $appVersion"
-
-
-                
+                    echo "application version: $appVersion"               
                 }
             }
         }
@@ -38,6 +36,27 @@ pipeline {
                 zip -q -r backend-${appVersion}.zip * -x Jenkinsfile -x backend-${appVersion}.zip
                 ls -ltr
                 """
+            }
+        }
+        stage ('nexus') {
+            steps {
+                script {
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: "${nexusUrl}",
+                        groupId: 'com.expense',
+                        version: "${appVersion}",
+                        repository: "backend",
+                        credentialsId: 'nexus_auth',
+                        artifacts: [
+                            [artifactId: "backend",
+                            classifier: '', 
+                            file: "backend-" + "${appVersion}" + '.zip' , 
+                            type: '.zip']
+                        ]
+                    )
+                }
             }
         }      
     }
