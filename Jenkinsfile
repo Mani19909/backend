@@ -2,49 +2,45 @@ pipeline {
     agent {
         label 'agent-1'
     }
-
     options {
-        timeout(time: 30, unit: 'MINUTES')
+        timeout (time: 30, unit: 'MINUTES')
         disableConcurrentBuilds()
         ansiColor('xterm')
     }
-
-    environment {
-        APP_VERSION = ''
+    environment{
+        appVersion = ''
     }
-
     stages {
-
         stage ("read the version"){
             steps {
                 script {
                     def packageJson = readJSON file: 'package.json'
-                    env.APP_VERSION = packageJson.version
-                    echo "application version: ${env.APP_VERSION}"
+                    appVersion = packageJson.version
+                    echo "application version: $appVersion"
+
+
+                
                 }
             }
         }
-
         stage ("install Dependencies") {
             steps {
-                sh """
+                sh '''
                 npm install
                 ls -ltr
-                echo "application version: ${APP_VERSION}"
-                """
+                echo "application version: $appVersion"
+                '''
             }
         }
-
         stage ('build') {
             steps {
                 sh """
-                zip -q -r backend-${APP_VERSION}.zip * -x Jenkinsfile -x backend-${APP_VERSION}.zip
+                zip -q -r backend-${appVersion}.zip * -x Jenkinsfile -x backend-${appVersion}.zip
                 ls -ltr
                 """
             }
-        }
+        }      
     }
-
     post {
         always {
             echo 'I will always say Hello again!'
@@ -58,3 +54,4 @@ pipeline {
         }
     }
 }
+
