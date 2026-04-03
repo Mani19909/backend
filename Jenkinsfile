@@ -9,7 +9,7 @@ pipeline {
     }
     environment{
         appVersion = ''
-        nexusUrl = "http://54.198.30.190:8081/repository/backend/"
+        nexusUrl = "54.198.30.190:8081"
     }
     stages {
         stage ("read the version"){
@@ -53,7 +53,7 @@ pipeline {
                             [artifactId: "backend",
                             classifier: '', 
                             file: "backend-" + "${appVersion}" + '.zip' , 
-                            type: '.zip']
+                            type: 'zip']
                         ]
                     )
                 }
