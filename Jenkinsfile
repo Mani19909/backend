@@ -9,7 +9,7 @@ pipeline {
     }
     environment{
         appVersion = ''
-        nexusUrl = "http://54.198.30.190:8081/#browse/upload:backend"
+        nexusUrl = "http://54.198.30.190:8081"
     }
     stages {
         stage ("read the version"){
