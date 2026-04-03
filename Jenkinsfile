@@ -8,15 +8,16 @@ pipeline {
         ansiColor('xterm')
     }
     environment{
-        appVersion = ''
+        APP_VERSION = ''
     }
     stages {
         stage ("read the version"){
             steps {
                 script {
-                    def packageJson = readJson file: 'package.json'
-                    appVersion = packageJson.version
-                    echo "application version: $appVersion"
+                    def packageJson = readJSON file: 'package.json'
+                    env.APP_VERSION = packageJson.version
+                    echo "application version: ${env.APP_VERSION}"
+
                 
                 }
             }
@@ -26,16 +27,16 @@ pipeline {
                 sh '''
                 npm install
                 ls -ltr
-                echo "application version: $appVersion"
+                echo "application version: ${APP_VERSION}"
                 '''
             }
         }
         stage ('build') {
             steps {
-                sh '''
-                zip -q -r backend-${appVersion}.zip * -x Jenkinsfile -x backend-${appVersion}.zip
+                sh """
+                zip -q -r backend-${APP_VERSION}.zip * -x Jenkinsfile -x backend-${APP_VERSION}.zip
                 ls -ltr
-                '''
+                """
             }
         }      
     }
