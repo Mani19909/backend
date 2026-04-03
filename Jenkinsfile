@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'Agent-1'
+        label 'agent-1'
     }
     options {
         timeout (time: 30, unit: 'MINUTES')
@@ -8,7 +8,7 @@ pipeline {
         ansiColor('xterm')
     }
     environment{
-        def appVersion = ''
+        appVersion = ''
     }
     stages {
         stage ("read the version"){
