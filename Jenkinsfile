@@ -9,7 +9,7 @@ pipeline {
     }
     environment{
         appVersion = ''
-        nexusUrl = "54.198.30.190:8081"
+        nexusUrl = "nexus.daws.info:8081"
     }
     stages {
         stage ("read the version"){
