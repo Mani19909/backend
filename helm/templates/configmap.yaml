@@ -4,4 +4,4 @@ metadata:
   name: backend
   namespace: expense
 data:
-  DB_HOST: db.dev-daws.info  
+  DB_HOST: db-dev-daws.info  
