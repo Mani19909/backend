@@ -38,37 +38,44 @@ pipeline {
                 """
             }
         }
-        stage ('nexus artifact upload') {
+        stage('Docker build') {
             steps {
-                script {
-                    nexusArtifactUploader(
-                        nexusVersion: 'nexus3',
-                        protocol: 'http',
-                        nexusUrl: "${nexusUrl}",
-                        groupId: 'com.expense',
-                        version: "${appVersion}",
-                        repository: "backend",
-                        credentialsId: 'nexus_auth',
-                        artifacts: [
-                            [artifactId: "backend",
-                            classifier: '', 
-                            file: "backend-" + "${appVersion}" + '.zip' , 
-                            type: 'zip']
-                        ]
-                    )
-                }
+                sh """
+                    docker build -t backend:${appVersion} .
+                """
             }
         }
-        stage('Deploy') {
-            steps {
-                script{
-                    def params = [
-                        string(name: 'appVersion', value: "${appVersion}")
-                    ]
-                    build job: 'backend-deploy', parameters: params, wait: false
-                }
-            }
-        }      
+        // stage ('nexus artifact upload') {
+            // steps {
+                // script {
+                    // nexusArtifactUploader(
+                        // nexusVersion: 'nexus3',
+                        // protocol: 'http',
+                        // nexusUrl: "${nexusUrl}",
+                        // groupId: 'com.expense',
+                        // version: "${appVersion}",
+                        // repository: "backend",
+                        // credentialsId: 'nexus_auth',
+                        // artifacts: [
+                            // [artifactId: "backend",
+                            // classifier: '', 
+                            // file: "backend-" + "${appVersion}" + '.zip' , 
+                            // type: 'zip']
+                        // ]
+                    // )
+                // }
+            // }
+        // }
+        // stage('Deploy') {
+            // steps {
+                // script{
+                    // def params = [
+                        // string(name: 'appVersion', value: "${appVersion}")
+                    // ]
+                    // build job: 'backend-deploy', parameters: params, wait: false
+                // }
+            // }
+        // }      
     }
     post {
         always {
