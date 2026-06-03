@@ -4,7 +4,7 @@
 
 def configMap = [
     type: "nodejsEKS",
-    component: "backend"
+    component: "backend",
     project: "expense"
 ]
 
